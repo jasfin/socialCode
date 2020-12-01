@@ -1,0 +1,24 @@
+<!-- these are partials -->
+<h3>Header</h3>  
+
+<ul>
+    <% if(locals.userFound) {%>
+        <li> 
+            <a href="/users/profile"><%= userFound.name %>
+            </a>
+        </li>
+
+        <li> 
+            <a href="/users/sign-out">Sign out</a>
+        </li>
+    <%} else{ %>
+        <li>
+            <a href="/users/signin">Sign in</a>
+        </li>   
+
+        <li>
+            <a href="/users/signup">Sign up</a>
+        </li>  
+    <% }%>
+
+</ul>
