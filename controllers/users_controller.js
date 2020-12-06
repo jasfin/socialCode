@@ -1,3 +1,4 @@
+const user = require('../models/user');
 const userModel = require('../models/user');
 
 
@@ -5,10 +6,24 @@ const userModel = require('../models/user');
 module.exports.profile = function(req,res){
     console.log('Req here is',req);
     console.log('user sent to view is:', req.user);
-    return res.render('user_profile',{
-            title: 'User profile'
+    user.findById(req.params.id, function(err,user){
+        return res.render('user_profile',{
+            title: 'User profile',
+            friend_profile: user
             //userFound: req.user
+        });
     });
+}
+
+module.exports.update = function(req,res){
+    if(req.user.id == req.params.id){
+        user.findByIdAndUpdate(req.params.id,req.body,function(err,user){
+            return res.redirect('back');
+        });
+    }
+    else{
+        return res.status(401).send('Unauthorized');
+    }
 }
 
 
@@ -46,6 +61,7 @@ module.exports.register = function(req,res){
 }
 
 module.exports.createSession = function(req,res){
+    req.flash('success',"You have logged in successfully"); //we created a flash message, nxt step is to take this flash message and put it into the response, for this we create a middleware flashMiddleware.js
     return res.redirect('/');
 }
 
@@ -93,6 +109,7 @@ module.exports.getSignUpPage = function(req,res){
 
 module.exports.destroySession = function(req,res){
     req.logout();
+    req.flash('success','You have logged out successfully');
     return res.redirect('/');    
 }
 

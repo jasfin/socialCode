@@ -13,6 +13,9 @@ const passportLocal = require('./config/passport-local-strategy');
 const MongoStore = require('connect-mongo')(session);
 
 const sassMiddleware = require('node-sass-middleware');
+const connectFlash = require('connect-flash');
+const customFlashMiddleware = require('./config/flashMiddleware');
+
 
 app.use(sassMiddleware({
     src: './assets/scss',
@@ -67,6 +70,11 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 app.use(passport.setAuthenticatedUser);
+
+//after session we are using connect-flash as we have to store flash messages in the session
+app.use(connectFlash());
+//we have put this custom middleware after flash so as to set the res.locals.flash from the request-req.flash, that we set in the controller
+app.use(customFlashMiddleware.setFlash);
 
 //routes should be defined after passport middleware is defined
 app.use('/',require('./routes'));

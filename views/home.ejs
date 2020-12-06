@@ -1,6 +1,43 @@
 <link rel="stylesheet" href="/css/home.css">
 <h1>SocialCode : Welcome to socialCode app</h1>
 
+<div id="home-container">
+  <section id="user-posts">
+    <% if(locals.userFound){%>
+      <h3>Posts</h3>
+      <form action="/posts/create" id="post-form" method="POST">
+          <textarea name="content" cols="30" rows="3" placeholder="Post here" required></textarea>
+          <input type="submit" value="Post">
+      </form>
+    <%}%>
+
+    <div id="posts-container">
+      <ul>
+          <% for(post of posts){ %>
+             
+              <%- include('_post') %>
+  
+          <%}%>
+      </ul>
+    </div>
+  </section>
+  
+  <section id="friends">
+    <h3>My Friends</h3>
+    <% for(friend of all_users) {%>
+        <p>
+           <a href="/users/profile/<%=friend.id%>"><%= friend.name %></a>
+        </p>
+     <% } %> 
+  
+    </section>
+
+</div>
+
+<script src="/js/home_posts.js"></script>
+
+
+
 
 
 
