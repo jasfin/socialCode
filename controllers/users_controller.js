@@ -1,12 +1,12 @@
-const user = require('../models/user');
-const userModel = require('../models/user');
-
+const UserModel = require('../models/user');
+const fs = require('fs');
+const path = require('path');
 
 
 module.exports.profile = function(req,res){
     console.log('Req here is',req);
     console.log('user sent to view is:', req.user);
-    user.findById(req.params.id, function(err,user){
+    UserModel.findById(req.params.id, function(err,user){
         return res.render('user_profile',{
             title: 'User profile',
             friend_profile: user
@@ -15,14 +15,48 @@ module.exports.profile = function(req,res){
     });
 }
 
-module.exports.update = function(req,res){
+module.exports.update = async function(req,res){
+    // if(req.user.id == req.params.id){
+    //     user.findByIdAndUpdate(req.params.id,req.body,function(err,user){
+    //         req.flash('success','Updated the details successfully');
+    //         return res.redirect('back');
+    //     });
+    // }
+    // else{
+    //     req.flash('error','Unauthorised operation');
+    //     return res.status(401).send('Unauthorized');
+    // }
     if(req.user.id == req.params.id){
-        user.findByIdAndUpdate(req.params.id,req.body,function(err,user){
+        try {
+            let userToUpdate = await UserModel.findById(req.params.id);
+            //req.body not accessbile here as we have encType as multipart formdata
+            console.log('req.body.name here is:',req.body.name);
+            UserModel.uploadDp(req, res, function(err){ //on calling uploadDp we will save the file in the uploads directory, path to the file is linked to the user object in the callback fn
+                if(err){
+                    console.log('Error from multer:',err);
+                    return;
+                }
+                console.log(req.file);
+                userToUpdate.name = req.body.name;
+                userToUpdate.email = req.body.email;
+                if(req.file){
+                    if(userToUpdate.dp && fs.existsSync(path.join(__dirname,'..',userToUpdate.dp))){
+                        fs.unlinkSync(path.join(__dirname,'..',userToUpdate.dp));
+                    }
+                    userToUpdate.dp = UserModel.pathToDp + '\\' + req.file.filename;
+                }
+                userToUpdate.save();
+                return res.redirect('back');
+            });
+        } catch (error) {
+            req.flash('error', error);
             return res.redirect('back');
-        });
+        }
     }
     else{
+        req.flash('error','Unauthorised operation');
         return res.status(401).send('Unauthorized');
+        //return res.status(401).send('Unauthorized');
     }
 }
 
@@ -46,7 +80,7 @@ module.exports.update = function(req,res){
 // }
 
 module.exports.register = function(req,res){
-    let userToCreate = new userModel(req.body);
+    let userToCreate = new UserModel(req.body);
     userToCreate.save(function(err,newUser){
         if(err){
             console.log('error creating a user');
@@ -67,7 +101,7 @@ module.exports.createSession = function(req,res){
 
 module.exports.signIn = function(req,res){   //- this used for manual auth
     console.log('trying to find email:',req.body.email);
-    userModel.findOne({email:req.body.email},function(err,userFound){
+    UserModel.findOne({email:req.body.email},function(err,userFound){
         if(err){
             console.log('error trying to sign in ', err);
             return;

@@ -1,5 +1,5 @@
 const express = require('express');
-//const cookieParser = require('cookie-parser'); - used for manual auth
+const cookieParser = require('cookie-parser'); //- used for manual auth
 const app = express();
 const port = 8000;
 //importing ejs layout
@@ -27,9 +27,11 @@ app.use(sassMiddleware({
 
 //to get the form data submitted by the user in the body of the request
 app.use(express.urlencoded({ extended: true })); 
-//app.use(cookieParser()); - this is used in case of manual authentication
+app.use(cookieParser()); //- this is used in case of manual authentication
 //include the static files - this should be before even defining the layouts as it would be used there
-app.use(express.static('assets'));
+app.use(express.static('./assets'));
+//below middleware is to make the uploads directory path to be available at /uploads, to ejs for renderning to browser
+app.use('/uploads', express.static('./uploads'));
 
 //before any routing happens tell the app to use the layout
 app.use(expressLayouts);

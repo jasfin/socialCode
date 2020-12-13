@@ -1,3 +1,4 @@
+
 {
     console.log('loaded');
 
@@ -14,8 +15,10 @@
                 data: newPostForm.serialize(),
                 success: function(data){
                     console.log(data);
-                    let showNewPostCreated = postToDom(data.data.post);
-                    $('#posts-container>ul').prepend(showNewPostCreated);
+                    let showNewPostCreatedDOM = postToDom(data.data.post);
+                    $('#posts-container>ul').prepend(showNewPostCreatedDOM); //into the <ul> i am prepending a li element here
+                    //whenever we create a post, we have to make the delete button - X to be linked to the click event we defined in the deletePost fn
+                    deletePost($(' .delete-post-button', showNewPostCreatedDOM));
                 }, error: function(error){
                     console.log(error.responseText);
                 }
@@ -24,13 +27,13 @@
         });
     }
 
-    createPost();
+    
 
-    let postToDom = function(post){
-            return $(`<li id="post- ${post._id}">
+    let postToDom = function(post){ 
+            return $(`<li id="post-${post._id}">
             
             <small>
-                <a class="delete-post-button" href="/posts/delete/${post.id}">X</a>
+                <a class="delete-post-button" href="/posts/delete/${post._id}">X</a>
             </small>
 
             <p>
@@ -57,4 +60,33 @@
     }
 
 
+    //this method is used for deleting a post from the dom
+    let deletePost = function(deleteLink){
+        $(deleteLink).click(function(e){
+            e.preventDefault();
+
+            $.ajax({
+                type: 'get',
+                url: $(deleteLink).prop('href'),
+                success: function(data){
+                    //after successfull deletion from the db, we have to remove that post from the dom 
+
+                    $(`#post-${data.data.post_id}`).remove();
+                },
+                error: function(error){
+                    console.log(error.responseText);
+                }
+            })
+
+
+        });
+
+    }
+
+
+
+
+    createPost();
+
 }
+

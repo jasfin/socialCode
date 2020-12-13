@@ -20,7 +20,7 @@ module.exports.createPost = async function(req,res){
                 content: req.body.content,
                 user:req.user._id
             });   
-            
+            console.log('created post22 is',createdPost);
             //the below if is added after converting the post creation part to ajax
             if(req.xhr){
                 return res.status(200).json({
@@ -66,6 +66,16 @@ module.exports.deletePost = async function(req, res){
 
                 await postFound.remove();
                 await Comment.deleteMany({post: req.params.id});
+
+                if(req.xhr){
+                    return res.status(200).json({
+                        data: {
+                            post_id: req.params.id
+                        },
+                        message: 'Post deleted successfully'
+                    });
+                }
+
                 req.flash('success','post deleted');
                 return res.redirect('back');
             
