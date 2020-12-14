@@ -9,6 +9,8 @@ const db = require('./config/mongoose');
 const session = require('express-session');
 const passport = require('passport');
 const passportLocal = require('./config/passport-local-strategy');
+//for using jwt strategy
+const passportJwt = require('./config/passport-jwt-strategy');
 //mongoStore is used to store session cookie in the database so that each time server restarts the cookies aren't deleted
 const MongoStore = require('connect-mongo')(session);
 
