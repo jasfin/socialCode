@@ -1,2 +1,23 @@
-<h1> <%=title%> accessed</h1>
-<p>User with emailId <%= userFound.email %> and name <%= userFound.name %> is accessing the profile page</p> 
+    <h1> <%=title%> accessed</h1>
+
+    <img src="<%=userFound.dp%>" alt="<%=userFound.name%>" width="100">  
+    <!-- <p>User with emailId <%= userFound.email %> and name <%= userFound.name %> is accessing the profile page</p>  -->
+
+    <!-- provide a form to the user in case he wants to update his details -->
+    <% if(friend_profile.id == userFound.id) {%>
+
+        <form action="/users/update/<%= userFound.id %>" enctype="multipart/form-data" method="POST">
+            <input type="text" name="name" placeholder="Your name" value="<%=userFound.name%>" required>
+            <input type="email" name="email" placeholder="Your email" value="<%=userFound.email%>" required>
+            <input type="file" name="dps" placeholder="Display Picture">
+            <input type="submit" value="Update">
+        </form>
+    <% }else {%>
+            
+        <p><%= friend_profile.name %></p>
+        <p><%= friend_profile.email %></p>
+    
+    <%}%>
+
+
+

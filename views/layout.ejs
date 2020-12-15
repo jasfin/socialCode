@@ -3,6 +3,12 @@
 <head>
     <title><%=title%></title>
     <link rel="stylesheet" href="/css/layout.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/noty/3.1.4/noty.min.css">
+    <!-- cdn for noty -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/noty/3.1.4/noty.min.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    
 
     <%- style %>
 
@@ -11,10 +17,42 @@
 
     <%- include('_header'); %>
 
+    <%# this is commented code - we are using noty.js, hence this isn't required %>
+    <%# if(flash.loginStatus && flash.loginStatus.length>0) {%>
+        <h4>
+            <%#= flash.loginStatus%>
+        </h4>
+    <%#}%>
+
+    
+
+    
     <%- body -%>
 
     <%- include('_footer'); %>
 
     <%- script %>
+
+    <script>
+        <% if(flash.success && flash.success.length>0) {%>
+        new Noty({
+            theme: 'sunset',
+            text: "<%=flash.success%>",
+            type: 'success',
+            layout: 'top',
+            timeout: 1500
+        }).show();
+        <%}%>    
+
+        <% if(flash.error && flash.error.length>0) {%>
+        new Noty({
+            theme: 'sunset',
+            text: "<%=flash.error%>",
+            type: 'error',
+            layout: 'top',
+            timeout: 1500
+        }).show();
+        <%}%>
+    </script>
 </body>
 </html>

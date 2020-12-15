@@ -1,3 +1,19 @@
 body{
     background-color: lightgray;
 }
+
+#home-container{
+    display: flex;
+
+    #user-posts{
+        width: 70%;
+        padding: 10px;
+    }
+
+    #friends{
+        width: 30%;
+        padding: 10px;
+        border-left: 1px solid lightgoldenrodyellow;
+        height: 100%;
+    }
+}
