@@ -14,7 +14,9 @@
                 url: '/posts/create',
                 data: newPostForm.serialize(),
                 success: function(data){
-                    console.log(data);
+                    console.log("here22 data:",data);
+                    //let postPopulatedWithUser=data.data.post.populate('user').execPopulate();
+                    //console.log('with user is:',postPopulatedWithUser);
                     let showNewPostCreatedDOM = postToDom(data.data.post);
                     $('#posts-container>ul').prepend(showNewPostCreatedDOM); //into the <ul> i am prepending a li element here
                     //whenever we create a post, we have to make the delete button - X to be linked to the click event we defined in the deletePost fn
@@ -82,9 +84,6 @@
         });
 
     }
-
-
-
 
     createPost();
 

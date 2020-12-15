@@ -23,6 +23,8 @@ module.exports.createPost = async function(req,res){
             console.log('created post22 is',createdPost);
             //the below if is added after converting the post creation part to ajax
             if(req.xhr){
+                //bug fix for post owner name coming as undefined
+                createdPost = await createdPost.populate('user').execPopulate();
                 return res.status(200).json({
                     data: {
                         post: createdPost
