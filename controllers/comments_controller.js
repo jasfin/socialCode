@@ -1,6 +1,8 @@
 const Comment = require('../models/comment');
 const Post = require('../models/post');
 const commentsMailer = require('../emails/comments_mail');
+const queue = require('../config/kue');
+const emailCommentWorker = require('../kueWorker/email_comment_worker');
 
 //first find if the post exists and then only create the comment in db
 module.exports.create = async function(req, res){
@@ -32,7 +34,19 @@ module.exports.create = async function(req, res){
             if(req.xhr){
                 console.log('is xhr');
                 commentCreated = await commentCreated.populate('user').execPopulate();
-                commentsMailer.mailNewComment(commentCreated);
+                //commentsMailer.mailNewComment(commentCreated);
+
+                //commented above line as we are using kue now
+                //here we add a job to the email queue which will be processed by the kue worker
+                //to view the state of the jobs processed by kue, go to /node_modules/kue/bin/ in a terminal
+                    //and do run the js file - kue-dashboard
+                let jobCreated = queue.create('email', commentCreated).priority('normal').save( function(error){
+                    if(error){
+                        return console.log('error while pushing comment-email job to queue:',error);
+                    }
+                    console.log('job pushed to the queue has id:',jobCreated.id);
+                });
+
                 return res.status(200).json({
                     data: {
                         comment: commentCreated
