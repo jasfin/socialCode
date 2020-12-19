@@ -18,6 +18,14 @@ const sassMiddleware = require('node-sass-middleware');
 const connectFlash = require('connect-flash');
 const customFlashMiddleware = require('./config/flashMiddleware');
 
+//for testing CORS error - Not reqd
+const cors = require('cors');
+app.use(cors());
+
+//here we are setting up the chat server which is to be used in socket.io
+const httpServerForChat = require('http').createServer(app);
+const chatSocket = require('./config/chat_socket_BE').chatSocket(httpServerForChat);
+httpServerForChat.listen(5000);
 
 app.use(sassMiddleware({
     src: './assets/scss',
