@@ -33,7 +33,7 @@
   
     </section>
 
-    <%- include('_chat_box') %>
+    <%- include('_chat_box') %>  
 
 </div>
 
@@ -44,9 +44,9 @@
 <!-- this is for configuring socket.io on FE -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/3.0.4/socket.io.js"></script>
 <script src="/js/chat_socket_FE.js"></script>
-<% if (locals.userFound){ %>
+<% if (locals.userFound){ %>   
   <script>
-      new ChatEngine('user-chat-box', '<%= locals.userFound._id %>');
+      new ChatEngine('user-chat-box', '<%= locals.userFound.email %>', '<%= locals.userFound.name %>');
   </script>
   <% } %>
 
