@@ -1,4 +1,7 @@
 const express = require('express');
+const properties = require('./config/properties');
+const path = require('path');
+const LOGGER = require('morgan');
 const cookieParser = require('cookie-parser'); //- used for manual auth
 const app = express();
 const port = 8000;
@@ -27,21 +30,28 @@ const httpServerForChat = require('http').createServer(app);
 const chatSocket = require('./config/chat_socket_BE').chatSocket(httpServerForChat);
 httpServerForChat.listen(5000);
 
-app.use(sassMiddleware({
-    src: './assets/scss',
-    dest: './assets/css',
-    debug: true,
-    outputStyle: "expanded",
-    prefix: '/css'
-}));
+if(properties.name == 'development_environment'){
+    console.log('inside dev env');
+    app.use(sassMiddleware({
+        src:  path.join(__dirname, properties.assets_path, 'scss'),//'./assets/scss',
+        dest: path.join(__dirname, properties.assets_path, 'css'),//'./assets/css',
+        debug: true,
+        outputStyle: "expanded",
+        prefix: '/css'
+    }));
+}
+
 
 //to get the form data submitted by the user in the body of the request
 app.use(express.urlencoded({ extended: true })); 
 app.use(cookieParser()); //- this is used in case of manual authentication
 //include the static files - this should be before even defining the layouts as it would be used there
-app.use(express.static('./assets'));
+app.use(express.static(path.join(__dirname, properties.assets_path)));
 //below middleware is to make the uploads directory path to be available at /uploads, to ejs for renderning to browser
 app.use('/uploads', express.static('./uploads'));
+
+//including the log just b4 routing
+app.use(LOGGER(properties.morgan.mode,properties.morgan.options));
 
 //before any routing happens tell the app to use the layout
 app.use(expressLayouts);
@@ -58,7 +68,7 @@ app.set('views','./views'); //path.join(__dirname,'views')
 app.use(session({
     name: 'socialCode',
     //should change the secret key later
-    secret:'lsdfjlskdjflskdf',
+    secret: properties.session_cookie_key,
     saveUninitialized: false,
     resave:false,
     cookie: {

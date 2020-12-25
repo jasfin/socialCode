@@ -1,7 +1,5 @@
 const Post = require('../models/post');
 const Comment = require('../models/comment');
-const { create } = require('../models/post');
-
 
 module.exports.createPost = async function(req,res){
     //converting below one to async await format
@@ -70,12 +68,16 @@ module.exports.deletePost = async function(req, res){
                 await Comment.deleteMany({post: req.params.id});
 
                 if(req.xhr){
+                    console.log('deletion req is xhr');
                     return res.status(200).json({
                         data: {
                             post_id: req.params.id
                         },
                         message: 'Post deleted successfully'
                     });
+                }
+                else{
+                    console.log('deletion req is not xhr');
                 }
 
                 req.flash('success','post deleted');

@@ -1,18 +1,10 @@
 const nodemailer = require("nodemailer");
 const path = require('path');
 const ejs = require('ejs');
+const properties = require('./properties');
 
 //create reusable transporter object using the default SMTP transport
-let transporter = nodemailer.createTransport({
-    service: 'gmail',
-    host: 'smtp.gmail.com',
-    port: 587,
-    secure: false,
-    auth: {
-        user: 'jasfin1995',
-        pass: 'trollingktu'
-    }
-});
+let transporter = nodemailer.createTransport(properties.smtp);
 
 //using ejs template for sending the email, data is rendered to the template and returned
 let renderTemplate = (data) => {

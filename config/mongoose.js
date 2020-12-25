@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
-mongoose.connect('mongodb://localhost/socialCode_development', {useNewUrlParser: true});
+const properties = require('./properties');
+mongoose.connect(`mongodb://localhost/${properties.db_name}`, {useNewUrlParser: true});
 
 const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'Error connecting to mongoDB'));

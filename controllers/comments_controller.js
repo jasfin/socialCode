@@ -55,7 +55,7 @@ module.exports.create = async function(req, res){
                 });
             }
             else{
-                console.log('not xhr');
+                console.log('not xhr here');
             }
             req.flash('success','comment created');
             return res.redirect('back');

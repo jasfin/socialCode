@@ -1,12 +1,15 @@
-{
-    console.log('comments ajax js class loaded');
-    let createComment = function(){
-        let newCommentForm = $('#comment-form');
-        let serializedForm = newCommentForm.serialize();
-
-        console.log('newFSubmitted:',serializedForm);
+    let createComment = function(postId){
+        console.log('comments ajax js class loaded for');
+        console.log(`id here is:#comment-form-${postId}`);
+        let newCommentForm = $(`#comment-form-${postId}`);
+        console.log('newFormDommed is:',newCommentForm);
+        //let serializedForm = newCommentForm.serialize();
+        //console.log('newFSubmitted:',serializedForm);
         newCommentForm.submit( function(e){
+            console.log('preventing default');
             e.preventDefault();
+            console.log('after prevention');
+            console.log('serialized newComment form is',newCommentForm.serialize());
             $.ajax({
                 type: 'post',
                 url: '/comments/create',
@@ -14,6 +17,7 @@
                 success: function(data){
                     console.log('data at comment creation:',data);
                     let showNewCommentCreatedDom = commentDom(data.data.comment);
+                    console.log(`appending new comment to:#post-comments-${data.data.comment.post}`);
                     $(`#post-comments-${data.data.comment.post}`).append(showNewCommentCreatedDom);
                     deleteComment($(' .delete-comment-button',showNewCommentCreatedDom)); //has to create this function
                 },
@@ -61,5 +65,4 @@
     }
 
 
-    createComment();
-}
+    // createComment();

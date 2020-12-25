@@ -4,10 +4,10 @@ const JwtStrategy = require('passport-jwt').Strategy;
 //below import is used to extract jwt from the header
 const ExtractJwt = require('passport-jwt').ExtractJwt;
 const UserModel = require('../models/user');
-
+const properties = require('./properties');
 var opts = {};
 opts.jwtFromRequest = ExtractJwt.fromAuthHeaderAsBearerToken();
-opts.secretOrKey = 'secretKeyToEncrypt22';
+opts.secretOrKey = properties.jwt_secret_key;
 
 //to read the JWT from the http Authorization header 
 passport.use(new JwtStrategy(opts, function(jwt_payload, done) {
