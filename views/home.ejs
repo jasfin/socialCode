@@ -38,13 +38,13 @@
 </div>
 
 <!-- this is for creating posts and comments via ajax -->
-<script src="/js/home_comments.js"></script>
-<script src="/js/home_posts.js"></script>
+<script src="<%=assetPath('/js/home_comments.js')%>"></script>
+<script src="<%=assetPath('/js/home_posts.js')%>"></script>
 
 
 <!-- this is for configuring socket.io on FE -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/3.0.4/socket.io.js"></script>
-<script src="/js/chat_socket_FE.js"></script>
+<script src= "https://cdnjs.cloudflare.com/ajax/libs/socket.io/3.0.4/socket.io.js"></script>
+<script src="<%=assetPath('/js/chat_socket_FE.js')%>"></script>
 <% if (locals.userFound){ %>   
   <script>
       new ChatEngine('user-chat-box', '<%= locals.userFound.email %>', '<%= locals.userFound.name %>');

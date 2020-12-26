@@ -9,7 +9,7 @@ module.exports = (app) => {
             return filePath;
         }
         console.log('filepath is',filePath,':and substring is:',filePath.substring(1));
-        console.log('returning:','/' + JSON.parse(fs.readFileSync(path.join(__dirname, '../public/rev-manifest.json')))[filePath.substring(1)])
-        return '/' + JSON.parse(fs.readFileSync(path.join(__dirname, '../public/rev-manifest.json')))[filePath.substring(1)];
+        console.log('returning:','/' + JSON.parse(fs.readFileSync(path.join(__dirname, '../public/assets/rev-manifest.json')))[filePath.substring(1)])
+        return '/' + JSON.parse(fs.readFileSync(path.join(__dirname, '../public/assets/rev-manifest.json')))[filePath.substring(1)];
     }
 }
