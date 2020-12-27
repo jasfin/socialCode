@@ -5,6 +5,7 @@ const LOGGER = require('morgan');
 const cookieParser = require('cookie-parser'); //- used for manual auth
 const app = express();
 const port = 8000;
+require('./config/view-helper')(app);
 //importing ejs layout
 const expressLayouts = require('express-ejs-layouts');
 const db = require('./config/mongoose');
@@ -30,7 +31,7 @@ const httpServerForChat = require('http').createServer(app);
 const chatSocket = require('./config/chat_socket_BE').chatSocket(httpServerForChat);
 httpServerForChat.listen(5000);
 
-if(properties.name == 'development_environment'){
+if(properties.name == 'DEV_ENV'){ 
     console.log('inside dev env');
     app.use(sassMiddleware({
         src:  path.join(__dirname, properties.assets_path, 'scss'),//'./assets/scss',
