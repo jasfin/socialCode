@@ -1,6 +1,6 @@
 const Comment = require('../models/comment');
 const Post = require('../models/post');
-const commentsMailer = require('../emails/comments_mail');
+// const commentsMailer = require('../emails/comments_mail');
 const queue = require('../config/kue');
 const emailCommentWorker = require('../kueWorker/email_comment_worker');
 
